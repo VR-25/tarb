@@ -1,0 +1,18 @@
+https://raw.githubusercontent.com/Magisk-Modules-Repo/busybox-ndk/master/busybox-arm-selinux
+https://raw.githubusercontent.com/Magisk-Modules-Repo/busybox-ndk/master/busybox-arm64-selinux
+https://raw.githubusercontent.com/Magisk-Modules-Repo/busybox-ndk/master/busybox-x86-selinux
+https://raw.githubusercontent.com/Magisk-Modules-Repo/busybox-ndk/master/busybox-x86_64-selinux
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/openssl/openssl-arm
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/openssl/openssl-arm64
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/openssl/openssl-x64
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/openssl/openssl-x86
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/tar/tar-arm
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/tar/tar-arm64
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/tar/tar-x64
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/tar/tar-x86
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/zstd/zstd-arm
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/zstd/zstd-arm64
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/zstd/zstd-x64
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/zstd/zstd-x86
+
+The binaries are provided by @osm0sis and @Zackptg5.
