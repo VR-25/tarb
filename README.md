@@ -1,4 +1,4 @@
-# Tarb, a backup solution for Android
+# Tarb, A Backup Solution for Android, With Recovery Mode Support
 
 
 ---
@@ -13,7 +13,7 @@ All required binaries/executables are included: busybox for general tools, opens
 ## NOTICE
 
 This program, along with all included binaries (busybox, openssl, tar and zstd), are free and open source software.
-They are provided as-is, and come with absolutely no warranties.
+They are provided "as is", and come with absolutely no warranties.
 One can do whatever they want with those programs, as long as they follow the terms of each license.
 
 The binaries are provided by @osm0sis and @Zackptg5 -- credits to them, other contributors, and original authors.
@@ -66,3 +66,4 @@ Examples:
 - [Telegram Profile](https://t.me/vr25xda)
 
 - [Upstream Repository](https://github.com/VR-25/tarb)
+- [XDA Thread](https://forum.xda-developers.com/t/tarb-a-backup-solution-for-android-with-recovery-mode-support.4443801)

@@ -81,11 +81,12 @@ bkp() {
           | sed -E 's/ +//; s/:.*//' > $BKP_DIR/${line% *}/runtime_perms
       }
 
-      [ ! -f $SSAID ] || {
+      # backup ssaid
+      if grep -q '^\<\?xml version=' $SSAID; then
         grep \"${line% *}\" $SSAID > $BKP_DIR/${line% *}/ssaid \
           && echo "  ssaid" \
           || rm $BKP_DIR/${line% *}/ssaid
-      } 2>/dev/null || :
+      fi 2>/dev/null || :
 
     } || :
 
@@ -128,7 +129,7 @@ bkp_r() {
       }
 
       # restore ssaid
-      if [ -f $SSAID ] && [ -f $BKP_DIR/${line% *}/ssaid ]; then
+      if [ -f $BKP_DIR/${line% *}/ssaid ] && grep -q '^\<\?xml version=' $SSAID; then
         echo "  ssaid"
         (set -- $(cat $BKP_DIR/${line% *}/ssaid)
         name=$(stat -c %u /mnt/expand/*/user/0/${line% *} /data/data/${line% *} 2>/dev/null || :)
@@ -382,7 +383,7 @@ flag() {
 
 help() {
   cat << EOF | more
-Tarb, a backup solution for Android
+Tarb, A Backup Solution for Android, With Recovery Mode Support
 Copyright (C) $1, $AUTHOR
 License: GPLv3+
 $2
@@ -398,7 +399,7 @@ All required binaries/executables are included: busybox for general tools, opens
 NOTICE
 
 This program, along with all included binaries (busybox, openssl, tar and zstd), are free and open source software.
-They are provided as-is, and come with absolutely no warranties.
+They are provided "as is", and come with absolutely no warranties.
 One can do whatever they want with those programs, as long as they follow the terms of each license.
 
 The binaries are provided by @osm0sis and @Zackptg5 -- credits to them, other contributors, and original authors.
@@ -463,6 +464,8 @@ Flags
   a   app (apks and split apks)
 
   c   custom (paths)
+
+  C   exclude all *[cC]ache* files/directories globally (alternative to -X '*[cC]ache*')
 
   d   data (user and user_de)
 
@@ -555,6 +558,8 @@ Examples
 
 Notes/tips
 
+  NO WARRANTIES, use at your own risk!
+
   Tarb copies itself to the backup directory, as needed (filename: ".tarb" (hidden)).
   Currently using $BKP_DIR/.
 
@@ -576,6 +581,13 @@ Notes/tips
   Recovery mode support depends on whether the recovery can mount and decrypt the target storage devices (including adopted storage).
   System settings and app runtime permissions cannot be backed up from recovery.
 
+  Regular (legacy) Android ID is backed up and restored as part of generic system settings (the s flag).
+  If $SSAID is encrypted, SSAIDs are not backed up / restored.
+  SSAIDs seem to be tied to Google Play Services -- meaning, alterntives such as MicroG don't have this "problem".
+
+  While Google email accounts can be backed up manually, restoring those is not guaranteed to work.
+  Android seems to be going the iOS way of things -- too many limitations.
+
   Each app is paused before data backup, and stopped prior to restore.
   For obvious reasons, this does not apply to terminal emulators.
 
@@ -595,9 +607,7 @@ Notes/tips
 
   If a backup/restore fails, the old data is preserved.
 
-  When reporting issues, one should provide as many details as possible, along with a copy of $TMPDIR/log.
-
-  NO WARRANTIES, use at your own risk!
+  When reporting issues, one shall provide as much information as possible, along with a copy of $TMPDIR/log.
 EOF
 }
 
@@ -912,8 +922,8 @@ PASSF=$TMPDIR/.pass
 
 AUTHOR="VR-25 @ GitHub"
 COPYRIGHT_YEAR=2022
-DESCRIPTION="Backup/restore apps and respective data, SSAIDs, runtime permissions, system settings, Magisk modules, and more."
-VERSION="v2022.may.9 202205090"
+DESCRIPTION="Backup/restore apps and respective data, SSAIDs, runtime permissions, generic system settings, Magisk modules, and more."
+VERSION="v2022.5.12 202205120"
 
 [ -z "${LINENO-}" ] || export PS4='$LINENO: '
 mkdir -p ${BKP_DIR##* } $BIN_DIR
@@ -949,14 +959,20 @@ fi
   exec 3<&0 4>&1
   FLAGS=${1#-?}
 
+  # no cache?
+  ! flag C && : > $X || {
+    echo "*[cC]ache*" > $X
+    FLAGS=$(echo "$FLAGS" | tr -d C)
+  }
+
   # zstd compression level
   COMP_LEVEL=1
-  ! match $FLAGS "*[0-9]*" || {
+  ! flag "[0-9]" || {
     COMP_LEVEL=$(echo $FLAGS | grep -Eo '[0-9]+')
     FLAGS=$(echo $FLAGS | sed -E 's/[0-9]+//')
   }
 
-  ! match "$FLAGS" "*[nx]*" || FLAGS=ad$FLAGS
+  ! flag "[nx]" || FLAGS=ad$FLAGS
   ! match "${2-}" "*/*" || FLAGS=c$FLAGS
   [ -n "$FLAGS" ] || FLAGS=ad
 
@@ -1028,7 +1044,7 @@ adb/magisk.db
 com.google.android.gms.appid.xml
 com.termux/files/home/shift
 com.termux/files/home/storage
-no_backup" > $X
+no_backup" >> $X
 
   # if flag "c*|*m"; then
   #   sed -Ei '/(art|dex|oat|lib)$/d' $X
