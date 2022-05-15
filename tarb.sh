@@ -679,6 +679,10 @@ lspkg() {
       done < $TMP
     else
       regex="$(lspkg . | sed 's/ .*//' | xargs | sed 's/ /|/g')"
+      if [ -n "$x" ] && [ -n "${1-}" ]; then
+        i="$(echo "$@" | sed 's/,/|/g')"
+        [ -n "$regex" ] && regex="$regex|$i" || regex="$i"
+      fi
     fi
   else
     extra="$(echo "$@" | sed -n '/+ /p' | sed 's/.*+ //; s/,/|/g; s/\$/ /g')"
