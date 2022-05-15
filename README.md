@@ -62,7 +62,7 @@ Examples:
 - [Donate - PayPal Me](https://paypal.me/vr25xda)
 
 - [Telegram Channel](https://t.me/vr25_xda)
-- [Telegram Group](https://t.me/tarb)
+- [Telegram Group](https://t.me/vr25_tarb)
 - [Telegram Profile](https://t.me/vr25xda)
 
 - [Upstream Repository](https://github.com/VR-25/tarb)
