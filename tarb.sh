@@ -698,7 +698,7 @@ lspkg() {
       j=${j%%-*}
       echo "$j $i"
     done
-  fi | { grep -E$x "${regex:-linuxIsAwesome}" | grep -v '^vmdl.*\.tmp$'; } || :
+  fi | { grep -E$x "${regex:-LinuxIsAwesome}" | grep -v '^vmdl.*\.tmp$'; } || :
 
   [ -z "$extra" ] || echo "$extra"
 
