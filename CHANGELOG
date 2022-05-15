@@ -1,3 +1,8 @@
+v2022.5.15 202205150
+- Fixed -rnx ['regex'];
+- -r shall have no fallback regex, just like -b;
+- Skip GMS data backup/restore.
+
 v2022.5.12 202205120
 - C flag: exclude all *[cC]ache* files/directories globally (alternative to -X '*[cC]ache*');
 - Do not backup/restore SSAIDs if /data/system/users/0/settings_ssaid.xml is encrypted;
