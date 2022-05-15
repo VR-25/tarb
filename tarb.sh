@@ -70,6 +70,7 @@ bkp() {
     reset_pass
 
     ! flag a || app $line
+    ! match "${line% *}" com.google.android.gms || return 0
     ! flag d || data $line
     ! flag e || ext $line
 
@@ -115,6 +116,7 @@ bkp_r() {
     reset_pass
 
     ! flag a || app_r $line
+    ! match "${line% *}" com.google.android.gms || return 0
     ! flag d || data_r $line
     ! flag e || ext_r $line
 
