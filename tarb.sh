@@ -610,6 +610,7 @@ Notes/tips
   If a backup/restore fails, the old data is preserved.
 
   When reporting issues, one shall provide as much information as possible, along with a copy of $TMPDIR/log.
+  $(mm_warn || :)
 EOF
 }
 
@@ -722,6 +723,12 @@ match() {
 
 match_term() {
   match $1 "*terminal*|*termux*|*nhterm*"
+}
+
+
+mm_warn() {
+  ls -d /data/adb/modules*/* >/dev/null 2>&1 \
+    && printf "\n  WARNING: review your Magisk modules. API/architecture specific modules must be manually disabled/removed to avoid bootloop.\n\n"
 }
 
 
@@ -1115,7 +1122,7 @@ EOF
   -r*)
     restore "$@"
     ! flag s || { _settings_r; echo; }
-    ! flag m || { cust_r /data/adb; echo; }
+    ! flag m || { cust_r /data/adb; mm_warn || echo; }
     ! flag o || optimize
   ;;
 
