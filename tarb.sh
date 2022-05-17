@@ -1074,9 +1074,9 @@ no_backup" >> $X
   unset exclude
 
   # self backup
-  rm -rf $BKP_DIR/.bin 2>/dev/null || : ###
-  mkdir -p $BKP_DIR
-  cp_uf $0 $BKP_DIR/.tarb >/dev/null
+  rm $BKP_DIR/.tarb 2>/dev/null || : ###
+  mkdir -p $BKP_DIR/.tarb
+  cp_uf $0 $BKP_DIR/.tarb/tarb-$ABI >/dev/null
 }
 
 
@@ -1095,7 +1095,6 @@ case "${1-}" in
   -l*) list "$@";;
 
   -m)
-    rm -rf /data/adb/modules/tarb 2>/dev/null || : ###
     dir=/data/adb/modules/vr25.tarb
     mkdir -p $dir/system/bin
     cp -f $0 $dir/tarb
@@ -1103,7 +1102,6 @@ case "${1-}" in
     for i in $dir/system/bin/ /sbin/; do
       ln -sf $dir/tarb $i 2>/dev/null || :
     done
-    rm /data/t 2>/dev/null || : ###
     echo "#!/sbin/sh" > /data/t
     sed 1d $dir/tarb >> /data/t
     chmod 0755 /data/t
