@@ -801,7 +801,7 @@ _settings() {
     rm -rf $path 2>/dev/null || :
     mkdir -p $path
     for namespace in global secure system; do
-      settings list $flag $namespace | tee $path/$namespace > /dev/null \
+      settings list $flag $namespace | tee $path/$namespace | grep = >/dev/null \
         && echo settings ${flag#--} $namespace \
         || rm $path/$namespace
     done
