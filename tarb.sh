@@ -680,10 +680,6 @@ lspkg() {
       done < $TMP
     else
       regex="$(lspkg . | sed 's/ .*//' | xargs | sed 's/ /|/g')"
-      if [ -n "$x" ] && [ -n "${1-}" ]; then
-        i="$(echo "$@" | sed 's/,/|/g')"
-        [ -n "$regex" ] && regex="$regex|$i" || regex="$i"
-      fi
     fi
   else
     extra="$(echo "$@" | sed -n '/+ /p' | sed 's/.*+ //; s/,/|/g; s/\$/ /g')"
@@ -760,6 +756,7 @@ reset_pass() {
 restore() {
   local one=
   local regex=
+  local x=v
   if flag c; then
     shift
     cust_r "$@"
@@ -768,7 +765,9 @@ restore() {
       one=$1
       shift
       regex="$(echo "$@" | sed 's/,/|/g')"
-      lspkg $one | grep -E "${regex:-.}" > $_LINES
+      flag x && regex="${regex:-^//$}" || { x=; regex="${regex:-.}"; }
+      lspkg $one | grep -E$x "$regex" > $_LINES
+      cat $_LINES; exit
     else
       lspkg "$@" > $_LINES
     fi
