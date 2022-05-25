@@ -40,5 +40,6 @@ for i in $*; do
   echo
 done
 
-sed -n 's/VERSION=.* //p' tarb.sh | tr -d \" > build/VERSION
+ver="$(head -n1 CHANGELOG | tee build/VERSION)"
+sed -i "/^VERSION=/s/=.*/=\"$ver\"/" tarb.sh
 exit
