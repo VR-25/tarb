@@ -120,30 +120,6 @@ bkp_r() {
     ! flag d || data_r $line
     ! flag e || ext_r $line
 
-    ! flag d || {
-
-      # restore runtime perms
-      [ ! -f $BKP_DIR/${line% *}/runtime_perms ] || {
-        echo "  runtime_perms"
-        while IFS= read perm; do
-          [ -z "$perm" ] || pm grant ${line% *} $perm </dev/null >/dev/null 2>&1
-        done < $BKP_DIR/${line% *}/runtime_perms
-      }
-
-      # restore ssaid
-      if [ -f $BKP_DIR/${line% *}/ssaid ] && grep -q '^\<\?xml version=' $SSAID; then
-        echo "  ssaid"
-        (set -- $(cat $BKP_DIR/${line% *}/ssaid)
-        name=$(stat -c %u /mnt/expand/*/user/0/${line% *} /data/data/${line% *} 2>/dev/null || :)
-        name=name=\"$name\"
-        sed "/\"${line% *}\"/d; /<\/settings>/d; /^$/d" $SSAID > $TMPDIR/ssaid
-        echo "$@" | sed "s/$3/$name/" >> $TMPDIR/ssaid
-        echo "</settings>" >> $TMPDIR/ssaid
-        cat $TMPDIR/ssaid > $SSAID)
-      fi
-
-    } || :
-
     echo
   done < $_LINES
 }
@@ -297,6 +273,26 @@ data_r() {
     chown -R $ug $i
     /system/bin/restorecon -DFR $i
   done >/dev/null 2>&1 || :
+
+  # restore runtime perms
+  { [ ! -f $BKP_DIR/${line% *}/runtime_perms ] || {
+    echo "  runtime_perms"
+    while IFS= read perm; do
+      [ -z "$perm" ] || pm grant ${line% *} $perm </dev/null >/dev/null 2>&1
+    done < $BKP_DIR/${line% *}/runtime_perms
+  }
+
+  # restore ssaid
+  if [ -f $BKP_DIR/${line% *}/ssaid ] && grep -q '^\<\?xml version=' $SSAID; then
+    echo "  ssaid"
+    (set -- $(cat $BKP_DIR/${line% *}/ssaid)
+    name=$(stat -c %u /mnt/expand/*/user/0/${line% *} /data/data/${line% *} 2>/dev/null || :)
+    name=name=\"$name\"
+    sed "/\"${line% *}\"/d; /<\/settings>/d; /^$/d" $SSAID > $TMPDIR/ssaid
+    echo "$@" | sed "s/$3/$name/" >> $TMPDIR/ssaid
+    echo "</settings>" >> $TMPDIR/ssaid
+    cat $TMPDIR/ssaid > $SSAID)
+  fi; } || :
 }
 
 
