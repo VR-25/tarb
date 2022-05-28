@@ -463,7 +463,7 @@ Flags
 
   c   custom (paths)
 
-  C   exclude all *[cC]ache* files/directories globally (alternative to -X '*[cC]ache*')
+  C   exclude all [Cc]ache files/directories globally (alternative to -X '[Cc]ache')
 
   d   data (user and user_de)
 
@@ -516,14 +516,14 @@ Examples
       -badsm10DeMO . + bromite,etar
 
     Exclude cache and randomFile directories/files globally
-      -badsm10DeMO . + bromite,etar -X '*[cC]ache*,randomFile'
+      -badsm10DeMO . + bromite,etar -X '[Cc]ache,randomFile'
 
     Encrypt
 
-      -badsm10DeMO -p='strongpassword' . + bromite,etar -X '*[cC]ache*'
+      -badsm10DeMO -p='strongpassword' . + bromite,etar -X '[Cc]ache'
 
       Alternative to -p='strongpassword'
-        TPASS='password' tarb -badsm10DeMO . + bromite,etar -X '*[cC]ache*'
+        TPASS='password' tarb -badsm10DeMO . + bromite,etar -X '[Cc]ache'
 
   Restore
 
@@ -969,7 +969,7 @@ fi
 
   # no cache?
   ! flag C && : > $X || {
-    echo "*[cC]ache*" > $X
+    echo "[cC]ache" > $X
     FLAGS=$(echo "$FLAGS" | tr -d C)
   }
 
@@ -1014,7 +1014,7 @@ fi
 # *.log
 # *.temp
 # *.tmp
-# *[cC]ache*
+# *[Cc]ache*
 # *[fF]irebase*
 # *[lL]ogs*
 # *[tT]humbnail*
