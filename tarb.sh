@@ -463,7 +463,7 @@ Flags
 
   c   custom (paths)
 
-  C   exclude all [Cc]ache files/directories globally (alternative to -X '[Cc]ache')
+  C   exclude all [Cc]ache files/directories globally (alternative to -X '[Cc]ache'); external cache (Android/data/*/cache/) is always excluded
 
   d   data (user and user_de)
 
