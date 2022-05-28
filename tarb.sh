@@ -1049,6 +1049,7 @@ fi
 echo "./lib
 adb/magisk
 adb/magisk.db
+Android/data/*/cache
 com.google.android.gms.appid.xml
 com.termux/files/home/shift
 com.termux/files/home/storage
