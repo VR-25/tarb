@@ -1,3 +1,11 @@
+v2022.6.4 202205040
+- cf899cd Remove debugging line, and reword a comment
+- f8fdb0f Update help text
+- bae6a39 C == "-X [Cc]ache" (non-greedy)
+- 9a9138e Always exclude external cache
+- 6d29dd6 Only restore SSAIDs and runtime perms after successful data restore
+- fb0d1e9 Fix build/VERSION
+
 v2022.5.25 202205250
 - Architecture-aware self-backup
 - Build script gets version from changelog
@@ -8,8 +16,3 @@ v2022.5.16 202205160
 - Fixed "backup/restore stops right after gms";
 - Remind user to disable/remove Magisk modules that may cause bootloop;
 - Updated Telegram group link.
-
-v2022.5.15 202205150
-- Fixed -rnx ['regex'];
-- -r shall have no fallback regex, just like -b;
-- Skip GMS data backup/restore.
