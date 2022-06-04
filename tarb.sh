@@ -101,7 +101,7 @@ bkp_r() {
   local line=
   local perm=
 
-  # ensure these packages are restored first, to prevent issues with dependent packages
+  # ensure these packages are restored first, to prevent dependence issues
   for line in com.google.android.gms trichromelibrary; do
     ! grep $line $_LINES > ${_LINES}.tmp || {
       grep -v $line $_LINES >> ${_LINES}.tmp || :
@@ -763,7 +763,6 @@ restore() {
       regex="$(echo "$@" | sed 's/,/|/g')"
       flag x && regex="${regex:-^//$}" || { x=; regex="${regex:-.}"; }
       lspkg $one | grep -E$x "$regex" > $_LINES
-      cat $_LINES; exit
     else
       lspkg "$@" > $_LINES
     fi
