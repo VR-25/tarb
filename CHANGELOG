@@ -1,4 +1,4 @@
-v2022.6.4 202205040
+v2022.6.4 202206040
 - cf899cd Remove debugging line, and reword a comment
 - f8fdb0f Update help text
 - bae6a39 C == "-X [Cc]ache" (non-greedy)
