@@ -463,7 +463,7 @@ Flags
 
   c   custom (paths)
 
-  C   exclude all [Cc]ache files/directories globally (alternative to -X '[Cc]ache'); external cache (Android/data/*/cache/) is always excluded
+  C   do not exclude internal cache; external cache (Android/data/*/cache/) is always excluded
 
   d   data (user and user_de)
 
@@ -515,15 +515,15 @@ Examples
     Include external data; exclude Android/media/ and Android/obb/
       -badsm10DeMO . + bromite,etar
 
-    Exclude cache and randomFile directories/files globally
-      -badsm10DeMO . + bromite,etar -X '[Cc]ache,randomFile'
+    Exclude specific directories/files globally
+      -badsm10DeMO . + bromite,etar -X 'useless_file,*.zip'
 
     Encrypt
 
-      -badsm10DeMO -p='strongpassword' . + bromite,etar -X '[Cc]ache'
+      -badsm10DeMO -p='strongpassword' . + bromite,etar -X 'useless_file,*.zip'
 
       Alternative to -p='strongpassword'
-        TPASS='password' tarb -badsm10DeMO . + bromite,etar -X '[Cc]ache'
+        TPASS='password' tarb -badsm10DeMO . + bromite,etar -X 'useless_file,*.zip'
 
   Restore
 
@@ -966,9 +966,9 @@ fi
   exec 3<&0 4>&1
   FLAGS=${1#-?}
 
-  # no cache?
-  ! flag C && : > $X || {
-    echo "[cC]ache" > $X
+  # C == include internal cache
+  ! flag C && echo "./cache" > $X || {
+    : > $X
     FLAGS=$(echo "$FLAGS" | tr -d C)
   }
 
@@ -1046,12 +1046,10 @@ fi
 # " > $X
 
 echo "./lib
-adb/magisk
-adb/magisk.db
+/data/adb/magisk
+/data/adb/magisk.db
 Android/data/*/cache
 com.google.android.gms.appid.xml
-com.termux/files/home/shift
-com.termux/files/home/storage
 no_backup" >> $X
 
   # if flag "c*|*m"; then
