@@ -497,22 +497,22 @@ Examples
     Files/folders
       -b /data/misc
 
-    All user and updated system apps + data
+    All user and updated system apps + data (-b == -bda)
       -b .
 
-    With compression level 10
+    With compression level 10 (default is 1)
       -b10 .
 
-    All of the above + generic system settings + Magisk data
+    All of the above + generic system settings (s) + Magisk data (m)
       -badsm10 .
 
     + data of regular system apps matching patterns
       -badsm10 . + bromite,etar
 
-    Exclude device encrypted data
+    Exclude device encrypted data (D)
       -badsm10D . + bromite,etar
 
-    Include external data; exclude Android/media/ and Android/obb/
+    Include external data (e); exclude Android/media/ (M) and Android/obb/ (O)
       -badsm10DeMO . + bromite,etar
 
     Exclude specific directories/files globally
@@ -530,13 +530,13 @@ Examples
     Files/folders
       -r /data/system/storage.xml
 
-    Matching apps with data + external data, Magisk data and system settings
+    Matching apps (a) with data (d) + external data (e), Magisk data (m) and system settings (s)
       -radems faceboo,whatsa,instagr
 
-    External data only, but without obb
+    External data only (e), but without obb (O)
       -reO somegame1,coolgame
 
-    Bromite browser, if it's not already installed
+    Bromite browser, if it's not already installed (n)
       -rn bromite$
 
   List backups
