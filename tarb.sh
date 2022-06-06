@@ -479,7 +479,7 @@ Flags
 
   n   with -r: restore only apps that are not already installed (can be filtered with regex); with -b: backup only new and updated apps
 
-  o   optimize apps after restore (bg-dexopt-job)
+  o   optimize apps after backup/restore (bg-dexopt-job)
 
   O   exclude Android/obb/
 
@@ -1079,6 +1079,7 @@ case "${1-}" in
     backup "$@"
     ! flag s || { _settings; echo; }
     ! flag m || cust /data/adb
+    ! flag o || optimize
   ;;
 
   -c) clean;;
