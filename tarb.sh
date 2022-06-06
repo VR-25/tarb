@@ -467,7 +467,7 @@ Flags
 
   d   data (user and user_de)
 
-  D   exclude device encrypted data (data_de, from /data/user_de/)
+  D   exclude device encrypted data (data_de, from /data/user_de/); implies "d"
 
   e   external data (/sdcard/Android/*/\$pkg/)
 
@@ -475,13 +475,13 @@ Flags
 
   m   backup/restore Magisk data as well (/data/adb/)
 
-  M   exclude Android/media/
+  M   exclude Android/media/; implies "e"
 
   n   with -r: restore only apps that are not already installed (can be filtered with regex); with -b: backup only new and updated apps
 
   o   optimize apps after backup/restore (bg-dexopt-job)
 
-  O   exclude Android/obb/
+  O   exclude Android/obb/; implies "e"
 
   s   backup/restore generic system settings
 
@@ -982,6 +982,10 @@ fi
   ! flag "[nx]" || FLAGS=ad$FLAGS
   ! match "${2-}" "*/*" || FLAGS=c$FLAGS
   [ -n "$FLAGS" ] || FLAGS=ad
+
+  ! flag D || FLAGS=d$FLAGS
+  ! flag M || FLAGS=e$FLAGS
+  ! flag O || FLAGS=e$FLAGS
 
   # encryption
   : > $PASSF
