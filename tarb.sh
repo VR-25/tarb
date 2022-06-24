@@ -55,11 +55,22 @@ app_r() {
 
 
 backup() {
+  local one=
+  local regex=
+  local x=v
   if flag c; then
     shift
     cust $*
   else
-    lspkg "$@" > $_LINES
+    if flag n; then
+      one=$1
+      shift
+      regex="$(echo "$@" | sed 's/,/|/g')"
+      flag x && regex="${regex:-^//$}" || { x=; regex="${regex:-.}"; }
+      lspkg $one | grep -E$x "$regex" > $_LINES
+    else
+      lspkg "$@" > $_LINES
+    fi
     bkp
   fi
 }
