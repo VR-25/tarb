@@ -13,16 +13,28 @@ allow_apk_sideload() {
 
 app() {
   local i=
-  mkdir -p $BKP_DIR/$1/${3:-apk}
-  : > $TMP
-  for i in $2/*.${3:-apk}; do
-    [ -f $i ] || return 0
-    cp_uf $i $BKP_DIR/$1/${3:-apk}/${i##*/}
-    echo ${i##*/} >> $TMP
-  done
-  for i in $BKP_DIR/$1/${3:-apk}/*.${3:-apk}; do
-    grep -q ${i##*/} $TMP || rm -f $i
-  done
+  local pwd=$PWD
+  local type=${3:-apk}
+  [ -d $2 ] || return 0
+  mkdir -p $BKP_DIR/$1/$type
+  if [ $type = apk ]; then
+    cd $2
+    [ $(du -c *.apk | sed -n 's/\ttotal$//p') -eq $([ ! -f $BKP_DIR/$1/$type/base.apk ] && echo 0 || du -c $BKP_DIR/$1/$type/*.apk | sed -n 's/\ttotal$//p') ] || {
+      echo "  apk(s)"
+      cp -f *.apk $BKP_DIR/$1/$type/
+    }
+    cd $pwd
+  else
+    : > $TMP
+    for i in $2/*.$type; do
+      [ -f $i ] || return 0
+      cp_uf $i $BKP_DIR/$1/$type/${i##*/}
+      echo ${i##*/} >> $TMP
+    done
+    for i in $BKP_DIR/$1/$type/*.$type; do
+      grep -q ${i##*/} $TMP || rm -f $i
+    done
+  fi
 }
 
 
