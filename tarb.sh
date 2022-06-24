@@ -61,7 +61,6 @@ backup() {
   else
     lspkg "$@" > $_LINES
     bkp
-    rmdir $BKP_DIR/*/* 2>/dev/null || :
   fi
 }
 
@@ -952,7 +951,6 @@ export PATH=$BIN_DIR:$PATH
 BKP_DIR=$(ls -1d $BKP_DIR 2>/dev/null | head -n1)
 
 trap 'e=$?; cd /; echo; exit $e' EXIT
-#set -euo pipefail 2>/dev/null || :
 set -eu
 
 
@@ -1022,55 +1020,12 @@ fi
   }
 
   # exclusion list
-#   echo "
-# *.[aA]ds.*
-# *.[tT]rash
-# *.dex
-# *.log
-# *.temp
-# *.tmp
-# *[Cc]ache*
-# *[fF]irebase*
-# *[lL]ogs*
-# *[tT]humbnail*
-# *[tT]humbs
-# *[tT]rash
-# *crash*report*
-# *error*report*
-# *lytic*
-# .[ov]dex
-# .art
-# .dex
-# .oat
-# [lL]og
-# [lL]og[fF]ile
-# [lL]ogs
-# [tT]emp
-# [tT]mp
-# app_optimized
-# app_tmp
-# dex
-# error
-# oat
-# ./lib
-# adb/magisk
-# adb/magisk.db
-# com.google.android.gms.appid.xml
-# files/home/shift
-# files/home/storage
-# no_backup
-# " > $X
-
-echo "./lib
+  echo "./lib
 /data/adb/magisk
 /data/adb/magisk.db
 Android/data/*/cache
 com.google.android.gms.appid.xml
 no_backup" >> $X
-
-  # if flag "c*|*m"; then
-  #   sed -Ei '/(art|dex|oat|lib)$/d' $X
-  # fi
 
   # custom exclusion list
   exclude=$(echo "$@" | grep ' \-X ..' | sed 's/.*-X //; s/,/\n/g') 2>/dev/null || :
@@ -1083,7 +1038,6 @@ no_backup" >> $X
   unset exclude
 
   # self backup
-  rm $BKP_DIR/.tarb 2>/dev/null || : ###
   mkdir -p $BKP_DIR/.tarb
   cp_uf $0 $BKP_DIR/.tarb/tarb-$ABI >/dev/null
 }
