@@ -1,3 +1,13 @@
+v2022.6.25 202206250
+* ece9f5c Add Zelle donation info
+* e667f34 Add support for -bnx 'regex'
+* b1d3484 Remove obsolete lines
+* 2e50b94 Fix: incomplete apk backup
+* 5b268d9 Flag D implies d; M/O imply e
+* d898768 Make "o" flag work with "-b" as well
+* 9715bbb Update usage examples
+* ff40224 Exclude internal cache by default
+
 v2022.6.4 202206040
 - cf899cd Remove debugging line, and reword a comment
 - f8fdb0f Update help text
@@ -11,8 +21,3 @@ v2022.5.25 202205250
 - Build script gets version from changelog
 - Fixed `-rnx ['regex']`
 - Fixed settings backup output inconsistencies
-
-v2022.5.16 202205160
-- Fixed "backup/restore stops right after gms";
-- Remind user to disable/remove Magisk modules that may cause bootloop;
-- Updated Telegram group link.
