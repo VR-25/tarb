@@ -967,7 +967,7 @@ set -eu
 
 # prepare binaries
 [ -x $BIN_DIR/openssl ] || {
-  tail -n +$BIN_LINE "$0" | base64 -d | gzip -dc | tar -xf - -C $BIN_DIR/
+  tail -n +$BIN_LINE "$0" | base64 -d | gzip -d | tar -xf - -C $BIN_DIR/
   chmod -R 0700 $BIN_DIR
   busybox --install -s $BIN_DIR/
 }
