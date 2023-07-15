@@ -1048,9 +1048,11 @@ no_backup" >> $X
   }
   unset exclude
 
-  # self backup
-  mkdir -p $BKP_DIR/.tarb
-  cp_uf $0 $BKP_DIR/.tarb/tarb-$ABI >/dev/null
+  # self backup if BKPDIR is unset
+  [ -n "${BKPDIR:-}" ] || {
+    mkdir -p $BKP_DIR/.tarb
+    cp_uf $0 $BKP_DIR/.tarb/tarb-$ABI >/dev/null
+  }
 }
 
 
