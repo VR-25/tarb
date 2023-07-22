@@ -248,14 +248,14 @@ cust_r() {
 data() {
 
   local path=/mnt/expand/*/user/0/$1
-  [ -d $path ] || path=/data/data/$1
+  [ -d $path ] || path=$DATA/data/$1
   echo "  data"
   pause $1
   _tar -cf $BKP_DIR/$1/data.tar.zst -C $path .
 
   flag D || {
     path=/mnt/expand/*/user_de/0/$1
-    [ -d $path ] || path=/data/user_de/0/$1
+    [ -d $path ] || path=$DATA/user_de/0/$1
     [ ! -d $path ] || {
       echo "  data_de"
       _tar -cf $BKP_DIR/$1/data_de.tar.zst -C $path .
@@ -272,8 +272,8 @@ data_r() {
   local path=/mnt/expand/*/user/0/$1
   local path_de=/mnt/expand/*/user_de/0/$1
 
-  [ -d $path ] || path=/data/data/$1
-  [ -d $path_de ] || path_de=/data/user_de/0/$1
+  [ -d $path ] || path=$DATA/data/$1
+  [ -d $path_de ] || path_de=$DATA/user_de/0/$1
 
   ug=$(stat -c %u:%g $path 2>/dev/null) || return 0
   _stop $1
@@ -308,7 +308,7 @@ data_r() {
   if [ -f $BKP_DIR/${line% *}/ssaid ] && grep -q '^\<\?xml version=' $SSAID; then
     echo "  ssaid"
     (set -- $(cat $BKP_DIR/${line% *}/ssaid)
-    name=$(stat -c %u /mnt/expand/*/user/0/${line% *} /data/data/${line% *} 2>/dev/null || :)
+    name=$(stat -c %u /mnt/expand/*/user/0/${line% *} $DATA/data/${line% *} 2>/dev/null || :)
     name=name=\"$name\"
     sed "/\"${line% *}\"/d; /<\/settings>/d; /^$/d" $SSAID > $TMPDIR/ssaid
     echo "$@" | sed "s/$3/$name/" >> $TMPDIR/ssaid
@@ -364,7 +364,7 @@ ext_r() {
 
   local i=
   local ug=
-  ug=$(stat -c %u:%g /mnt/expand/*/user/0/$1 /data/data/$1 2>/dev/null || :) || return 0
+  ug=$(stat -c %u:%g /mnt/expand/*/user/0/$1 $DATA/data/$1 2>/dev/null || :) || return 0
   _stop $1
 
   [ ! -f $BKP_DIR/$1/data_ext.tar.zst* ] || {
@@ -499,7 +499,7 @@ Flags
 
   d   data (user and user_de)
 
-  D   exclude device encrypted data (data_de, from /data/user_de/); implies "d"
+  D   exclude device encrypted data (data_de, from $DATA/user_de/); implies "d"
 
   e   external data (/sdcard/Android/*/\$pkg/)
 
@@ -667,7 +667,7 @@ list() {
     ls -1 $BKP_DIR | sed 's|%|/|g; s/\.tar.zst.*//; s/^_//' | \
       while read i; do
         match $i "[_%]*" && echo $i || {
-          if test -d /data/data/$i || test -d /mnt/expand/*/user/0/$i; then
+          if test -d $DATA/data/$i || test -d /mnt/expand/*/user/0/$i; then
             echo I $i
           else
             echo N $i
@@ -711,7 +711,7 @@ lspkg() {
     fi
   else
     extra="$(echo "$@" | sed -n '/+ /p' | sed 's/.*+ //; s/,/|/g; s/\$/ /g')"
-    extra="$(ls -1 /data/data/ /data/user_de/0/ | sed 's|.*/||; s|$| linuxIsAwesome|' | sort -u  | grep -E "$extra")" 2>/dev/null || extra=
+    extra="$(ls -1 $DATA/data/ $DATA/user_de/0/ | sed 's|.*/||; s|$| linuxIsAwesome|' | sort -u  | grep -E "$extra")" 2>/dev/null || extra=
     regex="$(echo "$@" | sed 's/ + .*//; s/+ .*//; s/,/|/g; s/\$/ /g')"
   fi
 
@@ -732,7 +732,7 @@ lspkg() {
       [ -f $i ] || continue
       i=${i%/.system}
       i=${i##*/}
-      if [ -d /data/data/$i ] || [ -d /data/user/0/$i ]; then
+      if [ -d $DATA/data/$i ] || [ -d $DATA/user/0/$i ]; then
         echo $i linuxIsAwesome
       fi
     done
@@ -960,9 +960,9 @@ CUST_EXEC=/data/adb/vr25/bin
 PASSF=$TMPDIR/.pass
 
 AUTHOR="VR-25 @ GitHub"
-COPYRIGHT_YEAR=2022
+COPYRIGHT_YEAR=2022-2023
 DESCRIPTION="Backup/restore apps and respective data, SSAIDs, runtime permissions, generic system settings, Magisk modules, and more."
-VERSION="v2022.6.25 202206250"
+VERSION="v2023.7.22 202307220"
 
 [ -z "${LINENO-}" ] || export PS4='$LINENO: '
 mkdir -p ${BKP_DIR##* } $BIN_DIR
@@ -971,7 +971,10 @@ export PATH=$BIN_DIR:$PATH
 
 BKP_DIR=$(ls -1d $BKP_DIR 2>/dev/null | head -n1)
 
-trap 'e=$?; cd /; echo; exit $e' EXIT
+[ -d /mnt/data/data ] && DATA=/mnt/data || DATA=/data
+
+
+trap exxit EXIT
 set -eu
 
 
