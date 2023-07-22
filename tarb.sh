@@ -395,6 +395,16 @@ ext_r() {
 }
 
 
+exxit() {
+  local e=$?
+  set +eux
+  cd /
+  sed -i "s/${TPASS:-NO_TPASS_FOUND}/HIDDEN_TPASS/g" $TMPDIR/log 2>/dev/null
+  echo
+  exit $e
+}
+
+
 flag() {
   match $FLAGS "*$1*"
 }
