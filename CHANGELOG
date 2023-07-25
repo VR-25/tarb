@@ -1,3 +1,11 @@
+v2023.7.25 202307250
+- 347305d Extract binaries with gzip -d, instead of -dc
+- d3ee489 Print a blank line after GMS backup restore
+- 3fcb12d Backup tarb itself only if BKPDIR is unset
+- db3f3e8 Hide password from log
+- fcc9f36 Support app data isolation via /mnt/data
+- cb781d6 Update module installer
+
 v2022.6.25 202206250
 * ece9f5c Add Zelle donation info
 * e667f34 Add support for -bnx 'regex'
@@ -15,9 +23,3 @@ v2022.6.4 202206040
 - 9a9138e Always exclude external cache
 - 6d29dd6 Only restore SSAIDs and runtime perms after successful data restore
 - fb0d1e9 Fix build/VERSION
-
-v2022.5.25 202205250
-- Architecture-aware self-backup
-- Build script gets version from changelog
-- Fixed `-rnx ['regex']`
-- Fixed settings backup output inconsistencies

@@ -962,7 +962,7 @@ PASSF=$TMPDIR/.pass
 AUTHOR="VR-25 @ GitHub"
 COPYRIGHT_YEAR=2022-2023
 DESCRIPTION="Backup/restore apps and respective data, SSAIDs, runtime permissions, generic system settings, Magisk modules, and more."
-VERSION="v2023.7.22 202307220"
+VERSION="v2023.7.25 202307250"
 
 [ -z "${LINENO-}" ] || export PS4='$LINENO: '
 mkdir -p ${BKP_DIR##* } $BIN_DIR
