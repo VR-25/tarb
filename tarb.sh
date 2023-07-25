@@ -981,7 +981,7 @@ set -eu
 # prepare binaries
 [ -x $BIN_DIR/openssl ] || {
   tail -n +$BIN_LINE "$0" | base64 -d | gzip -d | tar -xf - -C $BIN_DIR/
-  chmod -R 0700 $BIN_DIR
+  chmod -R 0755 $BIN_DIR
   busybox --install -s $BIN_DIR/
 }
 
@@ -1085,17 +1085,17 @@ case "${1-}" in
   -l*) list "$@";;
 
   -m)
+    dir0=/data/adb/modules_update/vr25.tarb
     dir=/data/adb/modules/vr25.tarb
-    mkdir -p $dir/system/bin
-    cp -f $0 $dir/tarb
-    chmod 0755 $dir/tarb
-    for i in $dir/system/bin/ /sbin/; do
-      ln -sf $dir/tarb $i 2>/dev/null || :
-    done
+    bin=$dir0/system/bin/tarb
+    mkdir -p ${bin%/*} $dir
+    cp -f $0 $bin
+    ln -sf $bin /sbin/ 2>/dev/null || :
     echo "#!/sbin/sh" > /data/t
-    sed 1d $dir/tarb >> /data/t
-    chmod 0755 /data/t
-    cat << EOF > $dir/module.prop
+    sed 1d $bin >> /data/t
+    chmod 0755 $bin /data/t
+    chcon -R u:object_r:system_file:s0 $dir0 2>/dev/null || :
+    cat << EOF > $dir0/module.prop
 author=$AUTHOR
 description=$DESCRIPTION
 id=vr25.tarb
@@ -1103,6 +1103,8 @@ name=Tarb
 version=${VERSION% *}
 versionCode=${VERSION#* }
 EOF
+    cp -f $dir0/module.prop $dir/
+    touch $dir/update
   ;;
 
   -o) optimize;;
