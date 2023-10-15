@@ -80,6 +80,13 @@ bkp() {
 
   local line=
 
+  # backup only the last trichromelibrary version and trim old backups
+  ! grep trichromelibrary $_LINES | sort | tail -n 1 > ${_LINES}.tmp || {
+    grep -v trichromelibrary $_LINES >> ${_LINES}.tmp || :
+    mv -f ${_LINES}.tmp $_LINES
+    ! flag a || rm -rf $BKP_DIR/*trichromelibrary*/ 2>/dev/null || :
+  }
+
   while IFS= read line; do
 
     [ -n "$line" ] || continue
@@ -123,7 +130,7 @@ bkp_r() {
   local line=
   local perm=
 
-  # ensure these packages are restored first, to prevent dependence issues
+  # ensure these packages are restored first, to prevent dependency issues
   for line in com.google.android.gms trichromelibrary; do
     ! grep $line $_LINES > ${_LINES}.tmp || {
       grep -v $line $_LINES >> ${_LINES}.tmp || :
