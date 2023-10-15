@@ -23,7 +23,8 @@ for i in $*; do
     echo
     cd bin
     for j in $(grep -E "[_-]${i#x}-|[_-]$i-|-$i$" LINKS); do
-      wget -N $j
+      mv -f ${j##/} $TMPDIR/$i/ 2>/dev/null || :
+      wget -N $j || { sleep 5; wget -N $j; } || mv -f $TMPDIR/$i/${j##/} ./ 2>/dev/null || :
     done
     cd ..
     echo
