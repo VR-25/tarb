@@ -412,7 +412,7 @@ flag() {
 
 
 help() {
-  cat << EOF | more
+  cat << EOF | less
 Tarb, A Backup Solution for Android, With Recovery Mode Support
 Copyright (C) $1, $AUTHOR
 License: GPLv3+
