@@ -3,6 +3,7 @@
 echo
 set -eu
 sh -n tarb.sh
+
 TMPDIR=build
 BIN_LINE=$(awk '/^#binaries.tgz.base64/ { print NR + 1; exit 0; }' tarb.sh)
 offline=false
@@ -11,6 +12,10 @@ offline=false
   shift
   offline=true
 }
+
+ver="$(head -n1 CHANGELOG)"
+echo "$ver" | cut -d ' ' -f 2 > build/VERSION
+sed -i "/^VERSION=/s/=.*/=\"$ver\"/" tarb.sh
 
 mkdir -p $TMPDIR
 [ -n "${1-}" ] || set -- arm arm64 x86 x64
@@ -41,7 +46,4 @@ for i in $*; do
   echo
 done
 
-ver="$(head -n1 CHANGELOG)"
-echo "$ver" | cut -d ' ' -f 2 > build/VERSION
-sed -i "/^VERSION=/s/=.*/=\"$ver\"/" tarb.sh
 exit
