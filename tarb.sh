@@ -913,13 +913,12 @@ update() {
   local ans=
   local path=
 
-  printf "Checking for update..."
+  echo "Checking for update..."
   [ 0$(_curl VERSION) -gt 0${VERSION#* } ] || {
-    printf "\nNo update available\n"
+    echo "No update available."
     return 0
   }
 
-  printf "\n\n"
   _curl CHANGELOG
   echo
 
@@ -970,7 +969,7 @@ PASSF=$TMPDIR/.pass
 AUTHOR="VR-25 @ GitHub"
 COPYRIGHT_YEAR=2022-2023
 DESCRIPTION="Backup/restore apps and respective data, SSAIDs, runtime permissions, generic system settings, Magisk modules, and more."
-VERSION="v2023.10.16 202310160"
+VERSION="v2023.10.22 202310220"
 
 [ -z "${LINENO-}" ] || export PS4='$LINENO: '
 mkdir -p ${BKP_DIR##* } $BIN_DIR
