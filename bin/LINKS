@@ -2,6 +2,10 @@ https://raw.githubusercontent.com/Magisk-Modules-Repo/busybox-ndk/master/busybox
 https://raw.githubusercontent.com/Magisk-Modules-Repo/busybox-ndk/master/busybox-arm64-selinux
 https://raw.githubusercontent.com/Magisk-Modules-Repo/busybox-ndk/master/busybox-x86-selinux
 https://raw.githubusercontent.com/Magisk-Modules-Repo/busybox-ndk/master/busybox-x86_64-selinux
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/curl/curl-arm
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/curl/curl-arm64
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/curl/curl-x64
+https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/curl/curl-x86
 https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/openssl/openssl-arm
 https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/openssl/openssl-arm64
 https://raw.githubusercontent.com/Zackptg5/Cross-Compiled-Binaries-Android/master/openssl/openssl-x64

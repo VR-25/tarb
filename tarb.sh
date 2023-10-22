@@ -914,13 +914,13 @@ update() {
   local path=
 
   printf "Checking for update..."
-  [ 0$(_wget VERSION 2>/dev/null) -gt 0${VERSION#* } ] || {
+  [ 0$(_curl VERSION) -gt 0${VERSION#* } ] || {
     printf "\nNo update available\n"
     return 0
   }
 
   printf "\n\n"
-  _wget CHANGELOG 2>/dev/null
+  _curl CHANGELOG
   echo
 
   [ .${1-} = .-uu ] || {
@@ -929,7 +929,7 @@ update() {
     ! match "$ans" "[nN]" && echo || { echo; return 0; }
   }
 
-  _wget tarb-$ABI $TMPDIR/update
+  _curl tarb-$ABI $TMPDIR/update
   path=$(realpath $0)
   printf "\nUpgrading...\n"
 
@@ -939,13 +939,13 @@ update() {
   esac
 
   echo_run "rm $TMPDIR/update" "  "
-  echo Done
+  echo "  Done."
 }
 
 
-_wget() {
-  [ ! -f ${2:-//} ] || rm $2
-  PATH=${PATH#*:} $BIN_DIR/wget -O ${2:--} --no-check-certificate \
+_curl() {
+  [ ! -f ${2:-//} ] || rm -f $2
+  curl --dns-servers 9.9.9.9,1.1.1.1 --progress-bar --insecure -Lo ${2:--} \
     $([ $1 = CHANGELOG ] \
       && echo https://raw.githubusercontent.com/vr-25/tarb/main/CHANGELOG \
       || echo https://github.com/vr-25/tarb/releases/latest/download/$1)
