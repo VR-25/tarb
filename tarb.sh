@@ -986,11 +986,12 @@ set -eu
 
 
 # prepare binaries
-[ -x $BIN_DIR/openssl ] || {
+if [ ! -x $BIN_DIR/openssl ] || [ ".$(cat $TMPDIR/.VERSION 2>/dev/null || :)" != ".$VERSION" ]; then
   tail -n +$BIN_LINE "$0" | base64 -d | gzip -d | tar -xf - -C $BIN_DIR/
   chmod -R 0755 $BIN_DIR
   busybox --install -s $BIN_DIR/
-}
+  echo "$VERSION" > $TMPDIR/.VERSION
+fi
 
 
 # verbose and debugging
