@@ -13,26 +13,28 @@ allow_apk_sideload() {
 
 app() {
   local i=
-  local pwd=$PWD
   local type=${3:-apk}
   [ -d $2 ] || return 0
   mkdir -p $BKP_DIR/$1/$type
   if [ $type = apk ]; then
-    cd $2
-    [ $(du -c *.apk | sed -n 's/\ttotal$//p') -eq $([ ! -f $BKP_DIR/$1/$type/base.apk ] && echo 0 || du -c $BKP_DIR/$1/$type/*.apk | sed -n 's/\ttotal$//p') ] || {
-      echo "  apk(s)"
-      cp -f *.apk $BKP_DIR/$1/$type/
-    }
-    cd $pwd
+    for i in $2/*.apk; do
+      [ -f $i ] || continue
+      cp_uf $i $BKP_DIR/$1/$type/${i##*/}
+    done
+    for i in $BKP_DIR/$1/$type/*; do
+      [ -f $i ] || continue
+      [ -f $2/${i##*/} ] || rm -f $i
+    done
   else
     : > $TMP
     for i in $2/*.$type; do
-      [ -f $i ] || return 0
+      [ -f $i ] || continue
       cp_uf $i $BKP_DIR/$1/$type/${i##*/}
       echo ${i##*/} >> $TMP
     done
     for i in $BKP_DIR/$1/$type/*.$type; do
-      grep -q ${i##*/} $TMP || rm -f $i
+      [ -f $i ] || continue
+      grep -q "^${i##*/}$" $TMP || rm -f $i
     done
   fi
 }
@@ -63,6 +65,7 @@ backup() {
     cust $*
   else
     if flag n; then
+      printf "Checksumming APKs...\n\n"
       one=$1
       shift
       regex="$(echo "$@" | sed 's/,/|/g')"
@@ -167,10 +170,8 @@ clean() {
 sizes_match() {
   local c1=
   local c2=
-  [ ! -f $2 ] && c1=c1 || {
-    c1=$(stat -c %s $1)
-    c2=$(stat -c %s $2)
-  }
+  c1=$(md5sum "$1" | sed 's/ .*//')
+  [ ! -f "${2:-//}" ] || c2=$(md5sum "$2" | sed 's/ .*//')
   [ .$c1 = .$c2 ]
 }
 
@@ -710,8 +711,8 @@ lspkg() {
       regex=linuxIsAwesome
       while IFS= read line; do
         [ -n "$line" ] \
-        && sizes_match ${line#* }/base.apk $BKP_DIR/${line% *}/apk/base.apk \
-        && regex="$regex|${line% *}" || :
+          && sizes_match ${line#* }/base.apk $BKP_DIR/${line% *}/apk/base.apk \
+          && regex="$regex|${line% *}" || :
       done < $TMP
     else
       regex="$(lspkg . | sed 's/ .*//' | xargs | sed 's/ /|/g')"
