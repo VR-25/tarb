@@ -4,6 +4,28 @@
 # GPLv3+
 
 
+_abx() {
+
+  local conversion=
+  local output=
+
+  if [ ${1:-.} = $SSAID ]; then
+    conversion=abx2xml
+    output=-
+  else
+    conversion=xml2abx
+    output=$SSAID
+  fi
+
+  if $ABX; then
+    CLASSPATH=/system/framework/abx.jar \
+      /system/bin/app_process /system/bin com.android.commands.abx.Abx $conversion $1 $output
+  else
+    [ $output = - ] && cat $1 || cat $1 > $SSAID
+  fi
+}
+
+
 allow_apk_sideload() {
   settings put secure install_non_market_apps $1
   settings put global verifier_verify_adb_installs $2
@@ -115,12 +137,11 @@ bkp() {
       }
 
       # backup ssaid
-      if grep -q '^\<\?xml version=' $SSAID; then
-        grep \"${line% *}\" $SSAID > $BKP_DIR/${line% *}/ssaid \
-          && echo "  ssaid" \
-          || rm $BKP_DIR/${line% *}/ssaid
-      fi 2>/dev/null || :
-
+      ! $SSAID_F || {
+        _abx $SSAID | grep \"${line% *}\" > $BKP_DIR/${line% *}/ssaid \
+          && echo "  SSAID" \
+          || rm $BKP_DIR/${line% *}/ssaid 2>/dev/null
+      }
     } || :
 
     echo
@@ -313,15 +334,17 @@ data_r() {
   }
 
   # restore ssaid
-  if [ -f $BKP_DIR/${line% *}/ssaid ] && grep -q '^\<\?xml version=' $SSAID; then
-    echo "  ssaid"
+  if $SSAID_F && [ -f $BKP_DIR/${line% *}/ssaid ]; then
+    echo "  SSAID"
     (set -- $(cat $BKP_DIR/${line% *}/ssaid)
     name=$(stat -c %u /mnt/expand/*/user/0/${line% *} $DATA/data/${line% *} 2>/dev/null || :)
     name=name=\"$name\"
-    sed "/\"${line% *}\"/d; /<\/settings>/d; /^$/d" $SSAID > $TMPDIR/ssaid
-    echo "$@" | sed "s/$3/$name/" >> $TMPDIR/ssaid
-    echo "</settings>" >> $TMPDIR/ssaid
-    cat $TMPDIR/ssaid > $SSAID)
+    _abx $SSAID | sed "/\"${line% *}\"/d; /^$/d" > $TMPDIR/ssaid
+    sed -n '/<\/settings>/,$!p; /<\/settings>/,$d' $TMPDIR/ssaid > $TMPDIR/ssaid.1
+    sed -n '/<\/settings>/,$p' $TMPDIR/ssaid > $TMPDIR/ssaid.2
+    echo "$@" | sed "s/$3/$name/" >> $TMPDIR/ssaid.1
+    cat $TMPDIR/ssaid.1 $TMPDIR/ssaid.2 > $TMPDIR/ssaid
+    _abx $TMPDIR/ssaid)
   fi; } || :
 }
 
@@ -954,10 +977,12 @@ _curl() {
 echo
 
 ABI=
+ABX=true
 SSAID=/data/system/users/0/settings_ssaid.xml
+SSAID_F=true
 BKP_DIR=.vr25/tarb
 export TMPDIR=/dev/$BKP_DIR
-BKP_DIR="${BKPDIR:-/usb-otg/$BKP_DIR /external_sd/$BKP_DIR /mnt/media_rw/*/$BKP_DIR /sdcard/$BKP_DIR}"
+BKP_DIR="${BKPDIR:-/usb-otg/$BKP_DIR /sdcard1/$BKP_DIR /external_sd/$BKP_DIR /mnt/media_rw/*/$BKP_DIR /sdcard/$BKP_DIR}"
 BIN_DIR=$TMPDIR/bin
 BIN_LINE=BINLINENO
 TMP=$TMPDIR/TMP
@@ -1073,6 +1098,10 @@ no_backup" >> $X
   [ -n "${BKPDIR:-}" ] || {
     mkdir -p $BKP_DIR/.tarb
     cp_uf $0 $BKP_DIR/.tarb/tarb-$ABI >/dev/null
+  }
+
+  [ ! -f $SSAID ] && SSAID_F=false || {
+    grep -q '^ABX' $SSAID || ABX=false
   }
 }
 
