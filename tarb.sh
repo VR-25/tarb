@@ -452,7 +452,7 @@ $2
 
 $DESCRIPTION
 
-All required binaries/executables are included: busybox for general tools, openssl for encryption, tar for archiving, and zstd for compression.
+All required binaries/executables are included: busybox for general tools, curl for updates, openssl for encryption, tar for archiving, and zstd for compression.
 
 **Works in recovery mode as well.**
 
@@ -499,7 +499,7 @@ Options
 
   -l   list backups (includes install status)
 
-  -m   install as a Magisk module and make /data/t available for recovery
+  -m   install as a Magisk/KernelSU module and make /data/t available for recovery; if /sbin is not available, one can run /dev/tarb to avoid the need for rebooting right away
 
   -o   run android's bg-dexopt-job to optimize app runtime performance
 
@@ -621,7 +621,7 @@ Notes/tips
 
   NO WARRANTIES, use at your own risk!
 
-  Tarb copies itself to the backup directory, as needed (filename: ".tarb" (hidden)).
+  Tarb copies itself to the default backup directory, as needed.
   Currently using $BKP_DIR/.
 
   It uses egrep's regular expressions syntax.
@@ -783,7 +783,7 @@ match_term() {
 
 mm_warn() {
   ls -d /data/adb/modules*/* >/dev/null 2>&1 \
-    && printf "\n  WARNING: review your Magisk modules. API/architecture specific modules must be manually disabled/removed to avoid bootloop.\n\n"
+    && printf "\n  WARNING: review your Magisk/KernelSU modules. API/architecture specific modules must be manually disabled/removed to avoid bootloop.\n\n"
 }
 
 
