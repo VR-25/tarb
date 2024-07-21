@@ -956,7 +956,7 @@ update() {
   printf "\nUpgrading...\n"
 
   case $path in
-    /data/adb/modules/*) echo_run "sh $TMPDIR/update -x set -- -m >/dev/null" "  ";;
+    */system/bin/*) echo_run "sh $TMPDIR/update -x set -- -m >/dev/null" "  ";;
     *) echo_run "cat $TMPDIR/update > $path" "  ";;
   esac
 
@@ -1078,8 +1078,9 @@ fi
 
   # exclusion list
   echo "./lib
-/data/adb/magisk
-/data/adb/magisk.db
+/data/adb/ap*
+/data/adb/ksu*
+/data/adb/magisk*
 Android/data/*/cache
 com.google.android.gms.appid.xml
 no_backup" >> $X
@@ -1122,17 +1123,17 @@ case "${1-}" in
   -l*) list "$@";;
 
   -m)
-    dir0=/data/adb/modules_update/vr25.tarb
     dir=/data/adb/modules/vr25.tarb
-    bin=$dir0/system/bin/tarb
-    mkdir -p ${bin%/*} $dir
+    bin=$dir/system/bin/tarb
+    mkdir -p ${bin%/*}
     cp -f $0 $bin
     ln -sf $bin /sbin/ 2>/dev/null || :
+    ln -sf $bin /dev/ 2>/dev/null || :
     echo "#!/sbin/sh" > /data/t
     sed 1d $bin >> /data/t
     chmod 0755 $bin /data/t
-    chcon -R u:object_r:system_file:s0 $dir0 2>/dev/null || :
-    cat << EOF > $dir0/module.prop
+    chcon -R u:object_r:system_file:s0 $dir 2>/dev/null || :
+    cat << EOF > $dir/module.prop
 author=$AUTHOR
 description=$DESCRIPTION
 id=vr25.tarb
@@ -1140,8 +1141,6 @@ name=Tarb
 version=${VERSION% *}
 versionCode=${VERSION#* }
 EOF
-    cp -f $dir0/module.prop $dir/
-    touch $dir/update
   ;;
 
   -o) optimize;;
