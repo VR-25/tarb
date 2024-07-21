@@ -66,7 +66,7 @@ app_r() {
   local apk=
   local session=
   [ -d $BKP_DIR/$1/apk ] && echo "  app" || return 0
-  session=$(su -c pm install-create -r -t -i com.android.vending </dev/null | grep -Eo '[0-9]+')
+  session=$(nsenter pm install-create -r -t -i com.android.vending </dev/null | grep -Eo '[0-9]+')
   for apk in $BKP_DIR/$1/apk/*.apk; do
     [ -f $apk ] || return 0
     cat $apk | pm install-write -S $(stat -c %s $apk) $session ${apk##*/} - || {
