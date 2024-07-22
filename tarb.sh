@@ -992,9 +992,9 @@ CUST_EXEC=/data/adb/vr25/bin
 PASSF=$TMPDIR/.pass
 
 AUTHOR="VR-25 @ GitHub"
-COPYRIGHT_YEAR=2022-2023
-DESCRIPTION="Backup/restore apps and respective data, SSAIDs, runtime permissions, generic system settings, Magisk modules, and more."
-VERSION="v2023.10.22 202310220"
+COPYRIGHT_YEAR=2022-2024
+DESCRIPTION="Backup/restore apps and respective data, SSAIDs, runtime permissions, generic system settings, Magisk/KernelSU modules, and more."
+VERSION="v2024.7.22 202407220"
 
 [ -z "${LINENO-}" ] || export PS4='$LINENO: '
 mkdir -p ${BKP_DIR##* } $BIN_DIR
@@ -1141,6 +1141,7 @@ name=Tarb
 version=${VERSION% *}
 versionCode=${VERSION#* }
 EOF
+  echo "✅"
   ;;
 
   -o) optimize;;

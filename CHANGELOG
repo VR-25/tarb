@@ -1,3 +1,10 @@
+v2024.7.22 202407220
+- Improve module support for all available frameworks
+- Make build script work on BSD and MacOS
+- Support Android 12+ SSAID backup/restore
+- Support root environments without su (e.g., rooted adb)
+- Update help text
+
 v2023.10.22 202310220
 - Fix -u; add curl bins
 - Fix APK checksum logic
@@ -9,11 +16,3 @@ v2023.10.16 202310150
 - Handle failed binary downloads (build.sh)
 - Updated bundled binaries
 - Use less instead of more for displaying the help text
-
-v2023.7.25 202307250
-- 347305d Extract binaries with gzip -d, instead of -dc
-- d3ee489 Print a blank line after GMS backup restore
-- 3fcb12d Backup tarb itself only if BKPDIR is unset
-- db3f3e8 Hide password from log
-- fcc9f36 Support app data isolation via /mnt/data
-- cb781d6 Update module installer

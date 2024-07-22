@@ -4,7 +4,7 @@
 ---
 Backup/restore apps and respective data, SSAIDs, runtime permissions, system settings, Magisk modules, and more.
 
-All required binaries/executables are included: busybox for general tools, openssl for encryption, tar for archiving, and zstd for compression.
+All required binaries/executables are included: busybox for general tools, curl for updates, openssl for encryption, tar for archiving, and zstd for compression.
 
 **Works in recovery mode as well.**
 
@@ -30,7 +30,7 @@ Refer to the sources below for more information:
 
 e.g., `# sh /sdcard/tarb-arm64`
 
-The -m option installs Tarb as a Magisk module -- to be available system-wide, as `tarb` and `/data/t` (for recovery).
+The `-m` option installs Tarb as a Magisk/KernelSU module -- to be available system-wide, as `tarb` and `/data/t` (for recovery).
 
 
 ---

@@ -15,7 +15,7 @@ offline=false
 
 ver="$(head -n1 CHANGELOG)"
 echo "$ver" | cut -d ' ' -f 2 > build/VERSION
-sed -i "/^VERSION=/s/=.*/=\"$ver\"/" tarb.sh
+sed -i"" "/^VERSION=/s/=.*/=\"$ver\"/" tarb.sh
 
 mkdir -p $TMPDIR
 [ -n "${1-}" ] || set -- arm arm64 x86 x64
@@ -41,7 +41,7 @@ for i in $*; do
   done
   sed "s/BINLINENO/$BIN_LINE/" tarb.sh > $TMPDIR/tarb-$i
   tar -cf - -C $TMPDIR/$i . | gzip -9 | base64 >> $TMPDIR/tarb-$i
-  sed -i "/^ABI=/s/=.*/=$i/" $TMPDIR/tarb-$i
+  sed -i"" "/^ABI=/s/=.*/=$i/" $TMPDIR/tarb-$i
   rm -rf $TMPDIR/$i
   echo
 done
